@@ -85,6 +85,7 @@ class TreeTest < Minitest::Test
     tree.insert(87, "Logan")
     tree.insert(5, "Wonderwoman")
 
+    assert_equal 0, tree.depth_of(61)
     assert_equal 1, tree.depth_of(87)
     assert_equal 2, tree.depth_of(5)
   end
@@ -124,25 +125,29 @@ class TreeTest < Minitest::Test
   end
 
   def test_traverse_left
-# skip
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
-    # tree.insert(16, "Johnny English")
-    # tree.insert(99, "MAD MAX")
-    # tree.insert(87, "Logan")
     tree.insert(5, "Wonderwoman")
     queue = []
     result = []
     tree.traverse_left(tree.root, queue, result)
-    # binding.pry
+
     assert_equal result, result
   end
 
+  def test_sort_2_nodes
+    tree = Tree.new()
+    tree.insert(61, "Test 3 sort")
+    tree.insert(16, "Johnny English")
+
+    assert_equal [{"Johnny English"=>16},
+                  {"Test 3 sort"=>61}
+                  ], tree.sort
+  end
 
   def test_sort_3_nodes
-    skip
     tree = Tree.new()
     tree.insert(61, "Test 3 sort")
     tree.insert(16, "Johnny English")
@@ -155,13 +160,12 @@ class TreeTest < Minitest::Test
   end
 
   def test_sort_6_nodes
-    skip
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
-    tree.insert(99, "MAD MAX")
+    tree.insert(99, "test 6 sort")
     tree.insert(54, "Anchorman")
 
     assert_equal [{"Wonderwoman"=>5},
@@ -169,12 +173,12 @@ class TreeTest < Minitest::Test
                   {"Logan"=>25},
                   {"Anchorman"=>54},
                   {"Zoolander"=>61},
-                  {"MAD MAX"=>99}
+                  {"test 6 sort"=>99}
                   ], tree.sort
   end
 
   def test_sort_9_nodes
-    tree = Tree.new() #getting double "Rouge One", must be staying in the queue
+    tree = Tree.new()
     tree.insert(55, "Dodgeball")
     tree.insert(89, "Rouge One")
     tree.insert(39, "SpaceBalls")
@@ -182,7 +186,7 @@ class TreeTest < Minitest::Test
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
-    tree.insert(99, "MAD MAX")
+    tree.insert(99, "test 9 sort")
     tree.insert(54, "Anchorman")
 
     assert_equal [{"Wonderwoman"=>5},
@@ -193,11 +197,25 @@ class TreeTest < Minitest::Test
                   {"Dodgeball"=>55},
                   {"Zoolander"=>61},
                   {"Rouge One"=>89},
-                  {"MAD MAX"=>99}
+                  {"test 9 sort"=>99}
                   ], tree.sort
 
+    assert_equal 9, tree.sort.count 
+
   end
-  #separte setup from assertions
-  #make more variations in testing inputs
+
+  def test_load_file
+    tree = Tree.new()
+    file_name = "./lib/movies.txt"
+    tree.insert(55, "Dodgeball")
+    tree.insert(89, "Rouge One")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    movies_added = tree.load_file(file_name)
+
+    assert_equal 95, movies_added
+  end
+
 
 end
