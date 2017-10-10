@@ -124,7 +124,7 @@ class TreeTest < Minitest::Test
   end
 
   def test_traverse_left
-
+# skip
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
@@ -142,26 +142,20 @@ class TreeTest < Minitest::Test
 
 
   def test_sort_3_nodes
-    # skip
+    skip
     tree = Tree.new()
     tree.insert(61, "Test 3 sort")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
-    # tree.insert(5, "Wonderwoman")
-    # tree.insert(99, "MAD MAX")
-    # tree.insert(54, "Anchorman")
 
-    assert_equal [#{"Wonderwoman"=>5},
-                  {"Johnny English"=>16},
+    assert_equal [{"Johnny English"=>16},
                   {"Logan"=>25},
-                  # {"Anchorman"=>54},
                   {"Test 3 sort"=>61}
-                  # {"MAD MAX"=>99}
                   ], tree.sort
   end
 
   def test_sort_6_nodes
-    # skip
+    skip
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")
@@ -177,6 +171,31 @@ class TreeTest < Minitest::Test
                   {"Zoolander"=>61},
                   {"MAD MAX"=>99}
                   ], tree.sort
+  end
+
+  def test_sort_9_nodes
+    tree = Tree.new() #getting double "Rouge One", must be staying in the queue
+    tree.insert(55, "Dodgeball")
+    tree.insert(89, "Rouge One")
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "MAD MAX")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [{"Wonderwoman"=>5},
+                  {"Johnny English"=>16},
+                  {"Logan"=>25},
+                  {"SpaceBalls"=>39},
+                  {"Anchorman"=>54},
+                  {"Dodgeball"=>55},
+                  {"Zoolander"=>61},
+                  {"Rouge One"=>89},
+                  {"MAD MAX"=>99}
+                  ], tree.sort
+
   end
   #separte setup from assertions
   #make more variations in testing inputs

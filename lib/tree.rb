@@ -72,45 +72,49 @@ class Tree
     queue = []
     result = []
     result = traverse_left(start_node, queue, result)
-    # binding.pry
+    binding.pry
     result.map do |node|
       node_hashed(node)
     end
   end
 
   def traverse_left(start_node, queue, result)
-    until start_node.lower_link == nil
+    if start_node.nil?
+      # binding.pry
+      return result
+    end
+    until start_node.lower_link.nil?
       queue_higher_link_then_start_node(start_node, queue)
       start_node = start_node.lower_link
-      if start_node.lower_link == nil
-        result << start_node
+      if start_node.lower_link.nil?
+        queue << start_node
       end
     end
+    result << queue.pop
+    # binding.pry
+    #start node is far left node
     # binding.pry
     track_up_and_or_right(start_node, queue, result)
     result
   end
 
   def track_up_and_or_right(start_node, queue, result)
-    if start_node == queue[-1] && queue.count > 2
+    # binding.pry
+    if start_node.higher_link.nil? #lower left cannot have lower_link
+      if queue[0]
+        result << queue.pop
+      end
+      # start_node = queue[-1]
+      traverse_left(queue[-1], queue, result)
+    elsif start_node.higher_link
+      # start_node = start_node.higher_link
+      queue_higher_link_then_start_node(start_node.higher_link, queue)
       result << queue.pop
-      result << queue.pop
-      start_node = queue[0]
-      traverse_left(start_node, queue, result)
-    elsif start_node.higher_link #move to parent and check for higher_link, set it
-      start_node = start_node.higher_link
-      # binding.pry
-      #removes start_node for queue_higher_link_then_start_node
-      queue_higher_link_then_start_node(start_node, queue)
-      traverse_left(start_node, queue, result)
-    elsif start_node.higher_link.nil? && start_node.lower_link.nil?
-      result << queue.pop
-      result << queue.pop
+      traverse_left(start_node.higher_link, queue, result)
     else
-      # binding.pry
       result << queue.pop
-      track_up_and_or_right(start_node, queue, result)
-      # binding.pry
+      # start_node = queue[-1]
+      track_up_and_or_right(queue[-1], queue, result)
     end
   end
 
