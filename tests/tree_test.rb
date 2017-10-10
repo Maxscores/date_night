@@ -161,7 +161,7 @@ class TreeTest < Minitest::Test
   end
 
   def test_sort_6_nodes
-    skip
+    # skip
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")

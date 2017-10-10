@@ -104,7 +104,8 @@ class Tree
       queue_higher_link_then_start_node(start_node, queue)
       traverse_left(start_node, queue, result)
     elsif start_node.higher_link.nil? && start_node.lower_link.nil?
-
+      result << queue.pop
+      result << queue.pop
     else
       # binding.pry
       result << queue.pop
