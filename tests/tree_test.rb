@@ -237,5 +237,59 @@ class TreeTest < Minitest::Test
     assert_equal 3, root_higher_link_total_nodes
   end
 
+  def test_find_children_depth_1
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 6 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [tree.root.lower_link,
+                  tree.root.higher_link
+                  ], tree.find_children([tree.root])
+  end
+
+  def test_find_children_depth_2
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 6 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [tree.root.lower_link.lower_link,
+                  tree.root.lower_link.higher_link
+                  ], tree.health(1)
+  end
+
+  def test_find_children_depth_3
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 6 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [tree.root.lower_link.higher_link.higher_link
+                  ], tree.health(2)
+  end
+
+  def test_health
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 6 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [tree.root.lower_link,
+                  tree.root.higher_link
+                  ], tree.health
+  end
 
 end

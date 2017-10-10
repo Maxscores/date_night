@@ -18,9 +18,7 @@ class Tree
 
   def find_parent(new_node, start_node=root)
     new_rating = new_node.rating
-    if new_node.rating == start_node.rating
-      return false
-    end
+    return false if new_node.rating == start_node.rating
     if evaluate_greater_or_less_and_if_link_nil(new_rating, start_node)
       set_node_link(new_node, start_node)
     elsif less_than_and_link_true(new_rating, start_node)
@@ -54,9 +52,6 @@ class Tree
   end
 
   def node_hashed(node)
-    # nodes = {}
-    # nodes["#{node.movie_title}"] = node.rating
-    # binding.pry
     if node.nil?
       return
     else
@@ -176,7 +171,22 @@ class Tree
   end
 
 #node_health = [score, 1+num_children, 1+num_children/1+total_children]
-  def health(tree_level_to_test=0)
+  def health(depth_to_test=0)
+    runs = depth_to_test + 1
+    nodes_at_level = [root]
+    runs.times do
+      nodes_at_level = find_children(nodes_at_level)
+    end
+    nodes_at_level
+  end
+
+  def find_children(nodes_at_level)
+    children = []
+    nodes_at_level.each do |node|
+      children << node.lower_link if node.lower_link
+      children << node.higher_link if node.higher_link
+    end
+    children
   end
 
   def count_nodes(start_node=root)
