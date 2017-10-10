@@ -69,12 +69,55 @@ class Tree
   end
 
   def sort(start_node=root)
-    sorted = []
-    sorted << min
-    sorted.find do |node|
+    queue = []
+    result = []
+    result = traverse_left(start_node, queue, result)
+    # binding.pry
+    result.map do |node|
       node_hashed(node)
-      sorted << parent_node
     end
+  end
+
+  def traverse_left(start_node, queue, result)
+    until start_node.lower_link == nil
+      queue_higher_link_then_start_node(start_node, queue)
+      start_node = start_node.lower_link
+      if start_node.lower_link == nil
+        result << start_node
+      end
+    end
+    # binding.pry
+    track_up_and_or_right(start_node, queue, result)
+    result
+  end
+
+  def track_up_and_or_right(start_node, queue, result)
+    if start_node == queue[-1] && queue.count > 2
+      result << queue.pop
+      result << queue.pop
+      start_node = queue[0]
+      traverse_left(start_node, queue, result)
+    elsif start_node.higher_link #move to parent and check for higher_link, set it
+      start_node = start_node.higher_link
+      # binding.pry
+      #removes start_node for queue_higher_link_then_start_node
+      queue_higher_link_then_start_node(start_node, queue)
+      traverse_left(start_node, queue, result)
+    elsif start_node.higher_link.nil? && start_node.lower_link.nil?
+
+    else
+      # binding.pry
+      result << queue.pop
+      track_up_and_or_right(start_node, queue, result)
+      # binding.pry
+    end
+  end
+
+  def queue_higher_link_then_start_node(start_node, queue)
+    if start_node.higher_link
+      queue << start_node.higher_link
+    end
+    queue << start_node
   end
 
   def choose_child(rating_to_find, start_node)

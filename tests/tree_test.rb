@@ -112,32 +112,71 @@ class TreeTest < Minitest::Test
     assert_equal [{"Wonderwoman"=>5}], tree.min
   end
 
-  def test_first_sort
-    skip
+  def test_queue_higher_link_and_start
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
-    tree.insert(87, "Logan")
-    tree.insert(5, "Wonderwoman")
     tree.insert(99, "MAD MAX")
+    queue = []
+    tree.queue_higher_link_then_start_node(tree.root, queue)
 
-    assert_equal [{"Wonderwoman"=>5},
-                  {"Johnny English"=>16}], tree.sort
+    assert_equal [99, 61], [queue[0].rating, queue[1].rating]
   end
 
-  def test_sort
-    skip
+  def test_traverse_left
+
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
-    tree.insert(87, "Logan")
+    tree.insert(25, "Logan")
+    # tree.insert(16, "Johnny English")
+    # tree.insert(99, "MAD MAX")
+    # tree.insert(87, "Logan")
+    tree.insert(5, "Wonderwoman")
+    queue = []
+    result = []
+    tree.traverse_left(tree.root, queue, result)
+    # binding.pry
+    assert_equal result, result
+  end
+
+
+  def test_sort_3_nodes
+    # skip
+    tree = Tree.new()
+    tree.insert(61, "Test 3 sort")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    # tree.insert(5, "Wonderwoman")
+    # tree.insert(99, "MAD MAX")
+    # tree.insert(54, "Anchorman")
+
+    assert_equal [#{"Wonderwoman"=>5},
+                  {"Johnny English"=>16},
+                  {"Logan"=>25},
+                  # {"Anchorman"=>54},
+                  {"Test 3 sort"=>61}
+                  # {"MAD MAX"=>99}
+                  ], tree.sort
+  end
+
+  def test_sort_6_nodes
+    skip
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
     tree.insert(99, "MAD MAX")
+    tree.insert(54, "Anchorman")
+
     assert_equal [{"Wonderwoman"=>5},
                   {"Johnny English"=>16},
-                  {"Bill & Ted's Excellent Adventure"=>61},
-                  {"Logan"=>87},
-                  {"MAD MAX"=>99}], tree.sort
+                  {"Logan"=>25},
+                  {"Anchorman"=>54},
+                  {"Zoolander"=>61},
+                  {"MAD MAX"=>99}
+                  ], tree.sort
   end
   #separte setup from assertions
   #make more variations in testing inputs
