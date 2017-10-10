@@ -119,7 +119,7 @@ class TreeTest < Minitest::Test
     tree.insert(16, "Johnny English")
     tree.insert(99, "MAD MAX")
     queue = []
-    tree.queue_higher_link_then_start_node(tree.root, queue)
+    tree.manage_queue(tree.root, queue)
 
     assert_equal [99, 61], [queue[0].rating, queue[1].rating]
   end
@@ -200,7 +200,7 @@ class TreeTest < Minitest::Test
                   {"test 9 sort"=>99}
                   ], tree.sort
 
-    assert_equal 9, tree.sort.count 
+    assert_equal 9, tree.sort.count
 
   end
 
@@ -215,6 +215,26 @@ class TreeTest < Minitest::Test
     movies_added = tree.load_file(file_name)
 
     assert_equal 95, movies_added
+  end
+
+  def test_count_nodes
+    tree = Tree.new()
+    tree.insert(55, "Dodgeball")
+    tree.insert(89, "Rouge One")
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 9 sort")
+    tree.insert(54, "Anchorman")
+    total_nodes = tree.count_nodes
+    root_lower_link_total_nodes = tree.count_nodes(tree.root.lower_link)
+    root_higher_link_total_nodes = tree.count_nodes(tree.root.higher_link)
+
+    assert_equal 9, total_nodes
+    assert_equal 5, root_lower_link_total_nodes
+    assert_equal 3, root_higher_link_total_nodes
   end
 
 

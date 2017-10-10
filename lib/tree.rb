@@ -82,54 +82,40 @@ class Tree
     queue = []
     result = []
     result = traverse_left(start_node, queue, result)
-    # binding.pry
     result.map do |node|
       node_hashed(node)
     end
   end
 
   def traverse_left(start_node, queue, result)
-    if start_node.nil?
-      return result
-    end
+    return result if start_node.nil?
     until start_node.lower_link.nil?
-      queue_higher_link_then_start_node(start_node, queue)
+      manage_queue(start_node, queue)
       start_node = start_node.lower_link
-      if start_node.lower_link.nil?
-        queue << start_node
-      end
+      queue << start_node if start_node.lower_link.nil?
     end
-    result << queue.pop #q5,q3
-    #start node is far left node
-    track_up_and_or_right(start_node, queue, result)
-    # result
+    result << queue.pop
+    hop_right(start_node, queue, result)
   end
 
-#could create traverse_right and track_up
-  def track_up_and_or_right(start_node, queue, result)
-    if start_node.higher_link.nil? #(visit go up)
-      if queue[0] #queue.length > 0, queue.length > 1
-        result << queue.pop #q4
-      end
-      traverse_left(queue[-1], queue, result) # start_node = queue[-1]
+  def hop_right(start_node, queue, result)
+    if start_node.higher_link.nil?
+      result << queue.pop if queue[0]
+      traverse_left(queue[-1], queue, result)
     elsif start_node.higher_link
-      queue_higher_link_then_start_node(start_node.higher_link, queue) # start_node = start_node.higher_link
+      manage_queue(start_node.higher_link, queue)
       result << queue.pop
       traverse_left(start_node.higher_link, queue, result)
     else
       result << queue.pop
-      track_up_and_or_right(queue[-1], queue, result) # start_node = queue[-1]
+      hop_right(queue[-1], queue, result)
     end
   end
 
-  def queue_higher_link_then_start_node(start_node, queue)
-    if start_node.higher_link
-      queue << start_node.higher_link
-    end
+  def manage_queue(start_node, queue)
+    queue << start_node.higher_link if start_node.higher_link
     queue << start_node
-    if queue[0] == queue [-1] && queue.count > 2
-      queue.shift
-    end
+    queue.shift if queue[0] == queue [-1] && queue.count > 2
   end
 
   def choose_child(rating_to_find, start_node)
@@ -174,23 +160,28 @@ class Tree
     file = File.readlines(file_name)
     movies_added = 0
     file.each do |line|
-      if line[0..1].to_i < 10
-        line.prepend("0")
-      end
       movie = line.chomp.split(", ")
       added = insert(movie[0].to_i, movie[1])
-      if added == false
-        movies_added += 0
-      else
-        movies_added += 1
-      end
-
+      movies_added = check_if_added(added, movies_added)
     end
     movies_added
   end
 
-  def health(tree_level, current_depth=0)
+  def check_if_added(added, movies_added)
+    if added == false
+      movies_added += 0
+    else
+      movies_added += 1
+    end
+  end
 
+#node_health = [score, 1+num_children, 1+num_children/1+total_children]
+  def health(tree_level_to_test=0)
+  end
+
+  def count_nodes(start_node=root)
+    number_of_nodes = sort(start_node).count
   end
 
 end
+#try out errors in input, edge cases
