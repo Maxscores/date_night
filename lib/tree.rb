@@ -77,6 +77,7 @@ class Tree
     queue = []
     result = []
     result = traverse_left(start_node, queue, result)
+    # result << start_node if if_no_children(start_node) && result[0].nil?
     result.map do |node|
       node_hashed(node)
     end
@@ -84,6 +85,9 @@ class Tree
 
   def traverse_left(start_node, queue, result)
     return result if start_node.nil?
+    if start_node.lower_link.nil? && queue.empty?
+      manage_queue(start_node, queue)
+    end
     until start_node.lower_link.nil?
       manage_queue(start_node, queue)
       start_node = start_node.lower_link
@@ -129,6 +133,10 @@ class Tree
     end
   end
 
+  def if_no_children(start_node)
+    start_node.higher_link.nil? && start_node.lower_link.nil?
+  end
+
   def less_than_and_link_true(new_rating, start_node)
     start_node.rating > new_rating
   end
@@ -170,14 +178,17 @@ class Tree
     end
   end
 
-#node_health = [score, 1+num_children, 1+num_children/1+total_children]
   def health(depth_to_test=0)
-    runs = depth_to_test + 1
     nodes_at_level = [root]
-    runs.times do
+    depth_to_test.times do |time|
       nodes_at_level = find_children(nodes_at_level)
     end
-    nodes_at_level
+    nodes_at_level.map do |node|
+      node_health = []
+      node_health << node.rating
+      node_health << count_nodes(node)
+      node_health << (100*count_nodes(node) / count_nodes(@root))
+    end
   end
 
   def find_children(nodes_at_level)
@@ -190,7 +201,12 @@ class Tree
   end
 
   def count_nodes(start_node=root)
-    number_of_nodes = sort(start_node).count
+    sorted_nodes = sort(start_node)
+    sorted_nodes.delete(nil)
+    if sorted_nodes[-1] == sorted_nodes[-2]
+      sorted_nodes.pop
+    end
+    count_of_nodes = sorted_nodes.count
   end
 
 end

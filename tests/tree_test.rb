@@ -252,6 +252,7 @@ class TreeTest < Minitest::Test
   end
 
   def test_find_children_depth_2
+    skip
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")
@@ -266,6 +267,7 @@ class TreeTest < Minitest::Test
   end
 
   def test_find_children_depth_3
+    skip
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")
@@ -278,7 +280,7 @@ class TreeTest < Minitest::Test
                   ], tree.health(2)
   end
 
-  def test_health
+  def test_health_of_root
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")
@@ -287,9 +289,55 @@ class TreeTest < Minitest::Test
     tree.insert(99, "test 6 sort")
     tree.insert(54, "Anchorman")
 
-    assert_equal [tree.root.lower_link,
-                  tree.root.higher_link
-                  ], tree.health
+    assert_equal [[61, 6, 100]], tree.health
+  end
+
+  def test_health_of_level_1
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 6 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [[16, 4, 66],[99,1,16]], tree.health(1)
+  end
+
+  def test_health_of_level_2
+    tree = Tree.new()
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 6 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [[5, 1, 16],[25,2,33]], tree.health(2)
+  end
+
+  def test_health_on_another_collection
+    tree = Tree.new()
+    tree.insert(55, "Dodgeball")
+    tree.insert(89, "Rouge One")
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 9 sort")
+    tree.insert(54, "Anchorman")
+
+    assert_equal [[55, 9, 100]], tree.health(0)
+    assert_equal [[39, 5, 55],
+                  [89, 3, 33]
+                  ], tree.health(1)
+    assert_equal [[16, 3, 33],
+                  [54, 1, 11],
+                  [61, 1, 11],
+                  [99, 1, 11]
+                  ], tree.health(2)
+    assert_equal [[5, 1, 11], [25, 1, 11]], tree.health(3)
   end
 
 end
