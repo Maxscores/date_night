@@ -124,15 +124,13 @@ class TreeTest < Minitest::Test
     assert_equal [99, 61], [queue[0].rating, queue[1].rating]
   end
 
-  def test_traverse_left
+  def test_traverse_tree_s_mode
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
-    queue = []
-    result = []
-    tree.traverse_left(tree.root, queue, result)
+    result = tree.traverse_tree(tree.root, 's')
 
     assert_equal result, result
   end
@@ -251,35 +249,6 @@ class TreeTest < Minitest::Test
                   ], tree.find_children([tree.root])
   end
 
-  def test_find_children_depth_2
-    skip
-    tree = Tree.new()
-    tree.insert(61, "Zoolander")
-    tree.insert(16, "Johnny English")
-    tree.insert(25, "Logan")
-    tree.insert(5, "Wonderwoman")
-    tree.insert(99, "test 6 sort")
-    tree.insert(54, "Anchorman")
-
-    assert_equal [tree.root.lower_link.lower_link,
-                  tree.root.lower_link.higher_link
-                  ], tree.health(1)
-  end
-
-  def test_find_children_depth_3
-    skip
-    tree = Tree.new()
-    tree.insert(61, "Zoolander")
-    tree.insert(16, "Johnny English")
-    tree.insert(25, "Logan")
-    tree.insert(5, "Wonderwoman")
-    tree.insert(99, "test 6 sort")
-    tree.insert(54, "Anchorman")
-
-    assert_equal [tree.root.lower_link.higher_link.higher_link
-                  ], tree.health(2)
-  end
-
   def test_health_of_root
     tree = Tree.new()
     tree.insert(61, "Zoolander")
@@ -338,6 +307,28 @@ class TreeTest < Minitest::Test
                   [99, 1, 11]
                   ], tree.health(2)
     assert_equal [[5, 1, 11], [25, 1, 11]], tree.health(3)
+  end
+
+  def test_count_leaves_3_nodes
+    tree = Tree.new()
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+
+    assert_equal 2, tree.leaves
+  end
+
+  def test_count_leaves_7_nodes
+    tree = Tree.new()
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(55, "Dodgeball")
+    tree.insert(89, "Rouge One")
+
+    assert_equal 4, tree.leaves
   end
 
 end

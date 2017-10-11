@@ -74,40 +74,52 @@ class Tree
   end
 
   def sort(start_node=root)
-    queue = []
-    result = []
-    result = traverse_left(start_node, queue, result)
-    # result << start_node if if_no_children(start_node) && result[0].nil?
+    #mode: s
+    result = traverse_tree(start_node, "s")
     result.map do |node|
       node_hashed(node)
     end
   end
 
-  def traverse_left(start_node, queue, result)
-    return result if start_node.nil?
+  def traverse_tree(start_node, mode, queue=[], result=[], leaves=0)
+    return decide_return(mode, result, leaves) if start_node.nil?
     if start_node.lower_link.nil? && queue.empty?
       manage_queue(start_node, queue)
     end
+    start_node, queue, result = traverse_left(start_node, queue, result)
+    result << queue.pop
+    hop_right(start_node, mode, queue, result, leaves)
+  end
+
+  def traverse_left(start_node, queue, result)
     until start_node.lower_link.nil?
       manage_queue(start_node, queue)
       start_node = start_node.lower_link
       queue << start_node if start_node.lower_link.nil?
     end
-    result << queue.pop
-    hop_right(start_node, queue, result)
+    return start_node, queue, result
   end
 
-  def hop_right(start_node, queue, result)
+  def decide_return(mode, result, leaves)
+    if mode== 'l'
+      leaves
+    elsif mode== 's'
+      result
+    end
+  end
+
+  def hop_right(start_node, mode, queue, result, leaves)
     if start_node.higher_link.nil?
       result << queue.pop if queue[0]
-      traverse_left(queue[-1], queue, result)
+      leaves += 1
+      traverse_tree(queue[-1], mode, queue, result, leaves)
     elsif start_node.higher_link
       manage_queue(start_node.higher_link, queue)
       result << queue.pop
-      traverse_left(start_node.higher_link, queue, result)
+      traverse_tree(start_node.higher_link, mode, queue, result, leaves)
     else
       result << queue.pop
-      hop_right(queue[-1], queue, result)
+      hop_right(queue[-1], mode, queue, result, leaves)
     end
   end
 
@@ -206,7 +218,18 @@ class Tree
     if sorted_nodes[-1] == sorted_nodes[-2]
       sorted_nodes.pop
     end
-    count_of_nodes = sorted_nodes.count
+    sorted_nodes.count
+  end
+
+  def leaves
+    #need to traverse tree until getting to node with no links: leaves += 1
+    traverse_tree(@root, 'l')
+    #mode: l
+  end
+
+  def height
+    #mode: h
+    traverse_tree(@root, 'h')
   end
 
 end

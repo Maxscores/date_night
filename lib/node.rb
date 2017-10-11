@@ -1,5 +1,6 @@
 class Node
-  attr_accessor :rating, :movie_title, :higher_link, :lower_link
+  attr_reader :rating, :movie_title
+  attr_accessor :higher_link, :lower_link
 
   def initialize(rating, movie_title)
     @rating = rating
