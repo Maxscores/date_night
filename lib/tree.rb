@@ -81,52 +81,55 @@ class Tree
     end
   end
 
-  def traverse_tree(start_node, mode, queue=[], result=[], leaves=0)
-    return decide_return(mode, result, leaves) if start_node.nil?
+  def traverse_tree(start_node, mode, queue=[], result=[], leaves=0, height=0)
+    return decide_return(mode, result, leaves, height) if start_node.nil?
     if start_node.lower_link.nil? && queue.empty?
       manage_queue(start_node, queue)
     end
-    start_node, queue, result = traverse_left(start_node, queue, result)
+    start_node, queue, result, height = traverse_left(start_node, queue, result, height)
     result << queue.pop
-    hop_right(start_node, mode, queue, result, leaves)
+    hop_right(start_node, mode, queue, result, leaves, height)
   end
 
-  def traverse_left(start_node, queue, result)
+  def traverse_left(start_node, queue, result, height)
     until start_node.lower_link.nil?
       manage_queue(start_node, queue)
       start_node = start_node.lower_link
+      height += 1
       queue << start_node if start_node.lower_link.nil?
     end
-    return start_node, queue, result
+    return start_node, queue, result, height
   end
 
-  def decide_return(mode, result, leaves)
+  def decide_return(mode, result, leaves, max_height)
     if mode== 'l'
       leaves
     elsif mode== 's'
       result
+    elsif mode== 'h'
+      height
     end
   end
 
-  def hop_right(start_node, mode, queue, result, leaves)
+  def hop_right(start_node, mode, queue, result, leaves, height)
     if start_node.higher_link.nil?
-      result << queue.pop if queue[0]
+      result << queue.pop if queue.first
       leaves += 1
-      traverse_tree(queue[-1], mode, queue, result, leaves)
+      traverse_tree(queue.last, mode, queue, result, leaves)
     elsif start_node.higher_link
       manage_queue(start_node.higher_link, queue)
       result << queue.pop
       traverse_tree(start_node.higher_link, mode, queue, result, leaves)
     else
       result << queue.pop
-      hop_right(queue[-1], mode, queue, result, leaves)
+      hop_right(queue.last, mode, queue, result, leaves)
     end
   end
 
   def manage_queue(start_node, queue)
     queue << start_node.higher_link if start_node.higher_link
     queue << start_node
-    queue.shift if queue[0] == queue [-1] && queue.count > 2
+    queue.shift if queue.first == queue.last && queue.count > 2
   end
 
   def choose_child(rating_to_find, start_node)
@@ -176,7 +179,7 @@ class Tree
     movies_added = 0
     file.each do |line|
       movie = line.chomp.split(", ")
-      added = insert(movie[0].to_i, movie[1])
+      added = insert(movie.first.to_i, movie.last)
       movies_added = check_if_added(added, movies_added)
     end
     movies_added
