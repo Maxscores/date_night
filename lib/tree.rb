@@ -81,49 +81,62 @@ class Tree
     end
   end
 
-  def traverse_tree(start_node, mode, queue=[], result=[], leaves=0, height=0)
-    return decide_return(mode, result, leaves, height) if start_node.nil?
-    if start_node.lower_link.nil? && queue.empty?
-      manage_queue(start_node, queue)
-    end
-    start_node, queue, result, height = traverse_left(start_node, queue, result, height)
-    result << queue.pop
-    hop_right(start_node, mode, queue, result, leaves, height)
-  end
-
-  def traverse_left(start_node, queue, result, height)
-    until start_node.lower_link.nil?
-      manage_queue(start_node, queue)
-      start_node = start_node.lower_link
-      height += 1
-      queue << start_node if start_node.lower_link.nil?
-    end
-    return start_node, queue, result, height
-  end
-
-  def decide_return(mode, result, leaves, max_height)
+  def decide_return(mode, result, leaves)
     if mode== 'l'
       leaves
     elsif mode== 's'
       result
-    elsif mode== 'h'
-      height
+    # elsif mode== 'h'
+    #   height
     end
   end
 
-  def hop_right(start_node, mode, queue, result, leaves, height)
+  def traverse_tree(start_node, mode, queue=[], result=[], leaves=0)
+    return decide_return(mode, result, leaves) if start_node.nil?
+    sort_single_node(start_node, queue)
+    start_node, queue, result = traverse_left(start_node, queue, result)
+    result << queue.pop
+    hop_right(start_node, mode, queue, result, leaves)
+  end
+
+  def sort_single_node(start_node, queue)
+    if start_node.lower_link.nil? && queue.empty?
+      manage_queue(start_node, queue)
+    end
+  end
+
+  def traverse_left(start_node, queue, result)
+    until start_node.lower_link.nil?
+      manage_queue(start_node, queue)
+      start_node = start_node.lower_link
+      queue << start_node if start_node.lower_link.nil?
+    end
+    return start_node, queue, result
+  end
+
+
+
+  def hop_right(start_node, mode, queue, result, leaves)
     if start_node.higher_link.nil?
-      result << queue.pop if queue.first
-      leaves += 1
-      traverse_tree(queue.last, mode, queue, result, leaves)
+      no_higher_link(start_node, mode, queue, result, leaves)
     elsif start_node.higher_link
-      manage_queue(start_node.higher_link, queue)
-      result << queue.pop
-      traverse_tree(start_node.higher_link, mode, queue, result, leaves)
+      has_higher_link(start_node, mode, queue, result, leaves)
     else
       result << queue.pop
       hop_right(queue.last, mode, queue, result, leaves)
     end
+  end
+
+  def has_higher_link(start_node, mode, queue, result, leaves)
+    manage_queue(start_node.higher_link, queue)
+    result << queue.pop
+    traverse_tree(start_node.higher_link, mode, queue, result, leaves)
+  end
+
+  def no_higher_link(start_node, mode, queue, result, leaves)
+    result << queue.pop if queue.first
+    leaves += 1
+    traverse_tree(queue.last, mode, queue, result, leaves)
   end
 
   def manage_queue(start_node, queue)
@@ -198,6 +211,10 @@ class Tree
     depth_to_test.times do |time|
       nodes_at_level = find_children(nodes_at_level)
     end
+    create_health_array(nodes_at_level)
+  end
+
+  def create_health_array(nodes_at_level)
     nodes_at_level.map do |node|
       node_health = []
       node_health << node.rating
@@ -232,7 +249,7 @@ class Tree
 
   def height
     #mode: h
-    traverse_tree(@root, 'h')
+    # traverse_tree(@root, 'h')
   end
 
 end
