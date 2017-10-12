@@ -97,7 +97,6 @@ class Tree
     return [] if start_node.nil?
     sorted_nodes = []
     sorted_nodes.concat in_order_traverse(start_node.lower_link)
-    binding.pry
     sorted_nodes << start_node
     sorted_nodes.concat in_order_traverse(start_node.higher_link)
     sorted_nodes
@@ -145,10 +144,10 @@ class Tree
     depth_to_test.times do |time|
       nodes_at_level = find_children(nodes_at_level)
     end
-    create_health_array(nodes_at_level)
+    health_output(nodes_at_level)
   end
 
-  def create_health_array(nodes_at_level)
+  def health_output(nodes_at_level)
     nodes_at_level.map do |node|
       node_health = []
       node_health << node.rating
@@ -190,6 +189,4 @@ class Tree
     end
     height
   end
-
 end
-#try out errors in input, edge cases

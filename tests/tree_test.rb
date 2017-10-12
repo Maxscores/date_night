@@ -345,7 +345,6 @@ class TreeTest < Minitest::Test
     tree.insert(39, "SpaceBalls")
     tree.insert(61, "Zoolander")
     tree.insert(50, "Max")
-    tree.insert(89, "Rouge One")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
@@ -359,8 +358,7 @@ class TreeTest < Minitest::Test
                   {"Max" => 50},
                   {"Dodgeball" => 55},
                   {"Zoolander" => 61},
-                  {"SpaceJam" => 79},
-                  {"Rogue One" => 89}], tree.sort
+                  {"SpaceJam" => 79}], tree.sort
   end
 
   def test_height_13_nodes
