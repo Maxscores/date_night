@@ -322,13 +322,60 @@ class TreeTest < Minitest::Test
     tree = Tree.new()
     tree.insert(39, "SpaceBalls")
     tree.insert(61, "Zoolander")
+    tree.insert(89, "Rouge One")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
     tree.insert(55, "Dodgeball")
-    tree.insert(89, "Rouge One")
 
     assert_equal 4, tree.leaves
+  end
+
+  def test_height_3_nodes
+    # skip
+    tree = Tree.new()
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+
+    assert_equal 1, tree.height
+  end
+
+  def test_height_7_nodes
+    # skip
+    tree = Tree.new()
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(50, "Max")
+    tree.insert(89, "Rouge One")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(55, "Dodgeball")
+    tree.insert(79, "SpaceJam")
+
+    # binding.pry
+    assert_equal 3, tree.height
+  end
+
+  def test_height_13_nodes
+    # skip
+    tree = Tree.new()
+    tree.insert(55, "Dodgeball")
+    tree.insert(89, "Rouge One")
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(99, "test 9 sort")
+    tree.insert(54, "Anchorman")
+    tree.insert(17, "Johnny English")
+    tree.insert(29, "Logan")
+    tree.insert(7, "Wonderwoman")
+    tree.insert(58, "Dodgeball")
+
+    assert_equal 4, tree.height
   end
 
 end
