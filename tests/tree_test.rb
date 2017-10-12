@@ -44,7 +44,6 @@ class TreeTest < Minitest::Test
 
 
   def test_include_fails_if_only_root
-
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
 
@@ -53,7 +52,6 @@ class TreeTest < Minitest::Test
   end
 
   def test_include_fails_if_not_found
-
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
@@ -63,7 +61,6 @@ class TreeTest < Minitest::Test
   end
 
   def test_include_passes_if_found
-
     tree = Tree.new()
     tree.insert(61, "Bill & Ted's Excellent Adventure")
     tree.insert(16, "Johnny English")
@@ -113,28 +110,6 @@ class TreeTest < Minitest::Test
     assert_equal [{"Wonderwoman"=>5}], tree.min
   end
 
-  def test_queue_higher_link_and_start
-    tree = Tree.new()
-    tree.insert(61, "Bill & Ted's Excellent Adventure")
-    tree.insert(16, "Johnny English")
-    tree.insert(99, "MAD MAX")
-    queue = []
-    tree.manage_queue(tree.root, queue)
-
-    assert_equal [99, 61], [queue[0].rating, queue[1].rating]
-  end
-
-  def test_traverse_tree_s_mode
-    tree = Tree.new()
-    tree.insert(61, "Bill & Ted's Excellent Adventure")
-    tree.insert(16, "Johnny English")
-    tree.insert(25, "Logan")
-    tree.insert(5, "Wonderwoman")
-    result = tree.traverse_tree(tree.root, 's')
-
-    assert_equal result, result
-  end
-
   def test_sort_2_nodes
     tree = Tree.new()
     tree.insert(61, "Test 3 sort")
@@ -157,25 +132,36 @@ class TreeTest < Minitest::Test
                   ], tree.sort
   end
 
-  def test_sort_6_nodes
+  def test_sort_11_nodes
     tree = Tree.new()
     tree.insert(61, "Zoolander")
     tree.insert(16, "Johnny English")
     tree.insert(25, "Logan")
     tree.insert(5, "Wonderwoman")
-    tree.insert(99, "test 6 sort")
+    tree.insert(88, "test 6 sort")
     tree.insert(54, "Anchorman")
+    tree.insert(89, "Nate")
+    tree.insert(94, "HairBalls")
+    tree.insert(95, "HairBals")
+    tree.insert(96, "HairBls")
+    tree.insert(97, "Haialls")
+
 
     assert_equal [{"Wonderwoman"=>5},
                   {"Johnny English"=>16},
                   {"Logan"=>25},
                   {"Anchorman"=>54},
                   {"Zoolander"=>61},
-                  {"test 6 sort"=>99}
+                  {"test 6 sort"=>88},
+                  {"Nate"=>89},
+                  {"HairBalls"=>94},
+                  {"HairBals"=>95},
+                  {"HairBls"=>96},
+                  {"Haialls"=>97}
                   ], tree.sort
   end
 
-  def test_sort_9_nodes
+  def test_sort_9_nodes_count
     tree = Tree.new()
     tree.insert(55, "Dodgeball")
     tree.insert(89, "Rouge One")
@@ -227,12 +213,8 @@ class TreeTest < Minitest::Test
     tree.insert(99, "test 9 sort")
     tree.insert(54, "Anchorman")
     total_nodes = tree.count_nodes
-    root_lower_link_total_nodes = tree.count_nodes(tree.root.lower_link)
-    root_higher_link_total_nodes = tree.count_nodes(tree.root.higher_link)
 
     assert_equal 9, total_nodes
-    assert_equal 5, root_lower_link_total_nodes
-    assert_equal 3, root_higher_link_total_nodes
   end
 
   def test_find_children_depth_1
@@ -332,7 +314,6 @@ class TreeTest < Minitest::Test
   end
 
   def test_height_3_nodes
-    # skip
     tree = Tree.new()
     tree.insert(39, "SpaceBalls")
     tree.insert(61, "Zoolander")
@@ -341,8 +322,25 @@ class TreeTest < Minitest::Test
     assert_equal 1, tree.height
   end
 
-  def test_height_7_nodes
-    # skip
+  def test_height_7_nodes_many_right_edge_case
+    tree = Tree.new()
+    tree.insert(39, "SpaceBalls")
+    tree.insert(61, "Zoolander")
+    tree.insert(50, "Max")
+    tree.insert(89, "Rouge One")
+    tree.insert(16, "Johnny English")
+    tree.insert(25, "Logan")
+    tree.insert(5, "Wonderwoman")
+    tree.insert(55, "Dodgeball")
+    tree.insert(79, "SpaceJam")
+    tree.insert(95, "MAD MAX")
+    tree.insert(96, "MAD MAX")
+    tree.insert(99, "Zombieland")
+
+    assert_equal 5, tree.height
+  end
+
+  def test_sort_again_lots_of_right_links_edge_case
     tree = Tree.new()
     tree.insert(39, "SpaceBalls")
     tree.insert(61, "Zoolander")
@@ -354,12 +352,18 @@ class TreeTest < Minitest::Test
     tree.insert(55, "Dodgeball")
     tree.insert(79, "SpaceJam")
 
-    # binding.pry
-    assert_equal 3, tree.height
+    assert_equal [{"Wonderwoman" => 5},
+                  {"Johnny English" => 16},
+                  {"Logan" => 25},
+                  {"SpaceBalls" => 39},
+                  {"Max" => 50},
+                  {"Dodgeball" => 55},
+                  {"Zoolander" => 61},
+                  {"SpaceJam" => 79},
+                  {"Rogue One" => 89}], tree.sort
   end
 
   def test_height_13_nodes
-    # skip
     tree = Tree.new()
     tree.insert(55, "Dodgeball")
     tree.insert(89, "Rouge One")
