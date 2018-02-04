@@ -17,6 +17,7 @@ irb
 require './lib/tree.rb'
 tree = Tree.new
 ```
+## Instance Methods
 
 These instance methods can be called on the Tree object:
 
